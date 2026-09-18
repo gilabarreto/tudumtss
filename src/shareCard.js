@@ -75,7 +75,7 @@ function wrapCenteredText(ctx, text, cx, y, maxWidth, lineHeight) {
 }
 
 export function buildShareCanvas(film, state) {
-  const accent = COLOR_RGB[film.color] || COLOR_RGB.gold;
+  const accent = COLOR_RGB[film.color] || COLOR_RGB.blue;
   const w = 1080;
   const h = 1350;
 
@@ -137,7 +137,7 @@ export function buildShareCanvas(film, state) {
   y += 70;
 
   if (state.filmRating > 0) {
-    drawStarRow(ctx, w / 2, y, state.filmRating, COLOR_RGB.gold, 'FILM RATING');
+    drawStarRow(ctx, w / 2, y, state.filmRating, COLOR_RGB.blue, 'FILM RATING');
     y += 120;
   }
   if (state.soundtrackRating > 0) {
@@ -146,7 +146,7 @@ export function buildShareCanvas(film, state) {
   }
 
   ctx.font = '34px Anton, sans-serif';
-  ctx.fillStyle = COLOR_RGB.gold;
+  ctx.fillStyle = COLOR_RGB.blue;
   ctx.fillText('TUDUM', w / 2 - 40, h - 56);
   ctx.fillStyle = COLOR_RGB.magenta;
   ctx.fillText('TSS', w / 2 + 72, h - 56);

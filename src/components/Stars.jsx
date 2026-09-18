@@ -4,7 +4,7 @@ import { Star } from '../icons.jsx';
 /* Fileira de 5 estrelas com preenchimento fracionário.
    interactive → metades clicáveis (esquerda = .5, direita = inteiro). */
 export default function Stars({ value, kind = 'film', interactive = false, onRate }) {
-  const color = kind === 'soundtrack' ? COLOR_RGB.magenta : COLOR_RGB.gold;
+  const color = kind === 'soundtrack' ? COLOR_RGB.magenta : COLOR_RGB.blue;
 
   return (
     <span className="star-row" data-interactive={interactive ? 1 : 0}>

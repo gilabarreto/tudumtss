@@ -112,11 +112,11 @@ const GENRES = {
 };
 
 const GENRE_COLOR = {
-  'neo-noir':'magenta', 'synthwave':'cyan', 'crime':'gold',
-  'garage-rock':'gold', 'soul':'magenta', 'classic-rock':'cyan'
+  'neo-noir':'magenta', 'synthwave':'cyan', 'crime':'blue',
+  'garage-rock':'blue', 'soul':'magenta', 'classic-rock':'cyan'
 };
-const COLOR_HEX = { gold:'var(--gold)', cyan:'var(--cyan)', magenta:'var(--magenta)' };
-const COLOR_RGB = { gold:'#E8B84B', cyan:'#3FE0E5', magenta:'#F23F9E' };
+const COLOR_HEX = { blue:'var(--blue)', cyan:'var(--cyan)', magenta:'var(--magenta)' };
+const COLOR_RGB = { blue:'#3D6DFF', cyan:'#3FE0E5', magenta:'#F23F9E' };
 
 export { FILMS, SONGS, ARTISTS, GENRES, GENRE_COLOR, COLOR_HEX, COLOR_RGB };
 
