@@ -76,6 +76,35 @@ export default function FilmPage({ id }) {
                 <span>·</span>
                 <span className="dir">Dir. {film.director}</span>
               </div>
+
+              <div className="rating-badges">
+                <div className="rating-badge">
+                  <span className="rating-badge-label">Film</span>
+                  <Stars value={film.communityFilmRating} />
+                  <span className="rating-badge-val">{film.communityFilmRating}</span>
+                </div>
+                <div className="rating-badge">
+                  <span className="rating-badge-label">Soundtrack</span>
+                  <Stars value={film.communitySoundtrackRating} kind="soundtrack" />
+                  <span className="rating-badge-val">{film.communitySoundtrackRating}</span>
+                </div>
+                <div className="rating-badge you">
+                  <span className="rating-badge-label">You · Film</span>
+                  <Stars value={interactions.filmRating} interactive onRate={(v) => update({ filmRating: v })} />
+                  <span className="rating-badge-val">{interactions.filmRating || '—'}</span>
+                </div>
+                <div className="rating-badge you">
+                  <span className="rating-badge-label">You · Soundtrack</span>
+                  <Stars
+                    value={interactions.soundtrackRating}
+                    kind="soundtrack"
+                    interactive
+                    onRate={(v) => update({ soundtrackRating: v })}
+                  />
+                  <span className="rating-badge-val">{interactions.soundtrackRating || '—'}</span>
+                </div>
+              </div>
+
               <div className="genre-row">
                 {film.genres.map((g) => (
                   <span
@@ -115,142 +144,86 @@ export default function FilmPage({ id }) {
                   <Share /> Share
                 </button>
               </div>
+            </div>
+          </div>
+        </section>
 
-              <div className="watch-row">
-                <span className="watch-label mono">Watch on</span>
-                {film.providers.map((p) => (
-                  <span key={p.name} className={`provider-chip${p.type === 'rent' ? ' rent' : ''}`}>
-                    {p.name}
-                    <span className="ptype">{p.type}</span>
-                  </span>
+        <div className="film-layout">
+          <div className="film-main">
+            <section className="section">
+              <div className="section-head">
+                <div className="section-title"><b>Cast</b></div>
+              </div>
+              <div className="cast-strip">
+                {film.cast.map((c) => (
+                  <div className="cast-card" key={c.name}>
+                    <div className="cast-avatar">{c.name.charAt(0)}</div>
+                    <div className="cast-name">{c.name}</div>
+                    <div className="cast-role">{c.role}</div>
+                  </div>
                 ))}
               </div>
+            </section>
 
-              <div className="community-row">
-                <button className="stat-btn" onClick={() => setInfoModal('watched')}>
-                  <span className="stat-num">{film.community.watchedCount}</span>
-                  <span className="stat-label">Watched</span>
-                </button>
-                <button className="stat-btn" onClick={() => setInfoModal('reviews')}>
-                  <span className="stat-num">{film.community.reviewCount}</span>
-                  <span className="stat-label">Reviews</span>
-                </button>
-                <button className="stat-btn" onClick={() => setInfoModal('lists')}>
-                  <span className="stat-num">{film.community.listCount}</span>
-                  <span className="stat-label">Lists</span>
-                </button>
+            <section className="section">
+              <div className="section-head">
+                <div className="section-title"><b>Soundtrack</b></div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="section-head">
-            <div className="section-title"><b>Cast</b></div>
-          </div>
-          <div className="cast-strip">
-            {film.cast.map((c) => (
-              <div className="cast-card" key={c.name}>
-                <div className="cast-avatar">{c.name.charAt(0)}</div>
-                <div className="cast-name">{c.name}</div>
-                <div className="cast-role">{c.role}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="section-head">
-            <div className="section-title"><b>Soundtrack</b></div>
-          </div>
-          <div className="cue-timeline">
-            <div className="sprockets">
-              {Array.from({ length: 24 }).map((_, i) => <i key={i} />)}
-            </div>
-            <div className="track-line">
-              {film.songs.map((s) => (
-                <span
-                  key={s.songId}
-                  className="cue-marker"
-                  style={{ left: `${(s.minute / film.runtime) * 100}%`, background: `var(--${film.color})` }}
-                  title={SONGS[s.songId]?.title}
-                />
-              ))}
-            </div>
-            <div className="sprockets bottom">
-              {Array.from({ length: 24 }).map((_, i) => <i key={i} />)}
-            </div>
-            <div className="cue-labels">
-              <span>{fmt(0)}</span>
-              <span>{fmt(film.runtime)}</span>
-            </div>
-          </div>
-          <div className="track-list" style={{ marginTop: 16 }}>
-            {film.songs.map((s, i) => {
-              const song = SONGS[s.songId];
-              const artist = ARTISTS[song.artistId];
-              return (
-                <div className="track-row" key={s.songId} onClick={() => navigate('song', s.songId)}>
-                  <div className="track-index mono">{i + 1}</div>
-                  <div className="track-titling">
-                    <div className="track-title">{song.title}</div>
-                    <div
-                      className="track-artist"
-                      onClick={(e) => { e.stopPropagation(); navigate('artist', artist.id); }}
-                    >
-                      {artist.name}
-                    </div>
-                    <div className="track-scene">{s.scene}</div>
-                  </div>
-                  <div className="track-time mono">{fmt(s.minute)}</div>
-                  <div className="track-genre">
-                    {song.genres.map((g) => (
-                      <span key={g} className={`chip c-${GENRE_COLOR[g]}`}>{GENRES[g]?.name}</span>
-                    ))}
-                  </div>
+              <div className="cue-timeline">
+                <div className="sprockets">
+                  {Array.from({ length: 24 }).map((_, i) => <i key={i} />)}
                 </div>
-              );
-            })}
-          </div>
-        </section>
+                <div className="track-line">
+                  {film.songs.map((s) => (
+                    <span
+                      key={s.songId}
+                      className="cue-marker"
+                      style={{ left: `${(s.minute / film.runtime) * 100}%`, background: `var(--${film.color})` }}
+                      title={SONGS[s.songId]?.title}
+                    />
+                  ))}
+                </div>
+                <div className="sprockets bottom">
+                  {Array.from({ length: 24 }).map((_, i) => <i key={i} />)}
+                </div>
+                <div className="cue-labels">
+                  <span>{fmt(0)}</span>
+                  <span>{fmt(film.runtime)}</span>
+                </div>
+              </div>
+              <div className="track-list" style={{ marginTop: 16 }}>
+                {film.songs.map((s, i) => {
+                  const song = SONGS[s.songId];
+                  const artist = ARTISTS[song.artistId];
+                  return (
+                    <div className="track-row" key={s.songId} onClick={() => navigate('song', s.songId)}>
+                      <div className="track-index mono">{i + 1}</div>
+                      <div className="track-titling">
+                        <div className="track-title">{song.title}</div>
+                        <div
+                          className="track-artist"
+                          onClick={(e) => { e.stopPropagation(); navigate('artist', artist.id); }}
+                        >
+                          {artist.name}
+                        </div>
+                        <div className="track-scene">{s.scene}</div>
+                      </div>
+                      <div className="track-time mono">{fmt(s.minute)}</div>
+                      <div className="track-genre">
+                        {song.genres.map((g) => (
+                          <span key={g} className={`chip c-${GENRE_COLOR[g]}`}>{GENRES[g]?.name}</span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
 
-        <section className="section">
-          <div className="section-head">
-            <div className="section-title"><b>Ratings</b></div>
-          </div>
-          <div className="rating-badges">
-            <div className="rating-badge">
-              <span className="rating-badge-label">Film</span>
-              <Stars value={film.communityFilmRating} />
-              <span className="rating-badge-val">{film.communityFilmRating}</span>
-            </div>
-            <div className="rating-badge">
-              <span className="rating-badge-label">Soundtrack</span>
-              <Stars value={film.communitySoundtrackRating} kind="soundtrack" />
-              <span className="rating-badge-val">{film.communitySoundtrackRating}</span>
-            </div>
-            <div className="rating-badge you">
-              <span className="rating-badge-label">You · Film</span>
-              <Stars value={interactions.filmRating} interactive onRate={(v) => update({ filmRating: v })} />
-              <span className="rating-badge-val">{interactions.filmRating || '—'}</span>
-            </div>
-            <div className="rating-badge you">
-              <span className="rating-badge-label">You · Soundtrack</span>
-              <Stars
-                value={interactions.soundtrackRating}
-                kind="soundtrack"
-                interactive
-                onRate={(v) => update({ soundtrackRating: v })}
-              />
-              <span className="rating-badge-val">{interactions.soundtrackRating || '—'}</span>
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="triple-col">
-            <div className="col-block">
-              <h4>Crew</h4>
+            <section className="section">
+              <div className="section-head">
+                <div className="section-title"><b>Crew</b></div>
+              </div>
               <div className="col-list">
                 {film.crew.map((c) => (
                   <div className="col-item" key={c.role}>
@@ -259,8 +232,57 @@ export default function FilmPage({ id }) {
                   </div>
                 ))}
               </div>
+            </section>
+
+            {related.length > 0 && (
+              <section className="section">
+                <div className="section-head">
+                  <div className="section-title"><b>Related films</b></div>
+                </div>
+                <div className="related-films">
+                  {related.map((f) => (
+                    <div className="related-card" key={f.id} onClick={() => navigate('film', f.id)}>
+                      <div className="rc-title">{f.title}</div>
+                      <div className="rc-meta mono">{f.year}</div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+
+          <aside className="film-side">
+            <div className="side-block">
+              <h4>Where to watch</h4>
+              <div className="side-providers">
+                {film.providers.map((p) => (
+                  <span key={p.name} className={`provider-chip${p.type === 'rent' ? ' rent' : ''}`}>
+                    {p.name}
+                    <span className="ptype">{p.type}</span>
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className="col-block">
+
+            <div className="side-block">
+              <h4>Community</h4>
+              <div className="col-list">
+                <div className="detail-row clickable" onClick={() => setInfoModal('watched')}>
+                  <span className="dk">Watched</span>
+                  <span className="dv">{film.community.watchedCount}</span>
+                </div>
+                <div className="detail-row clickable" onClick={() => setInfoModal('reviews')}>
+                  <span className="dk">Reviews</span>
+                  <span className="dv">{film.community.reviewCount}</span>
+                </div>
+                <div className="detail-row clickable" onClick={() => setInfoModal('lists')}>
+                  <span className="dk">Lists</span>
+                  <span className="dv">{film.community.listCount}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="side-block">
               <h4>Details</h4>
               <div className="col-list">
                 {Object.entries(film.details).map(([k, v]) => (
@@ -271,7 +293,8 @@ export default function FilmPage({ id }) {
                 ))}
               </div>
             </div>
-            <div className="col-block">
+
+            <div className="side-block">
               <h4>Lists featuring this</h4>
               <div className="col-list">
                 {film.community.lists.map((l) => (
@@ -282,24 +305,8 @@ export default function FilmPage({ id }) {
                 ))}
               </div>
             </div>
-          </div>
-        </section>
-
-        {related.length > 0 && (
-          <section className="section">
-            <div className="section-head">
-              <div className="section-title"><b>Related films</b></div>
-            </div>
-            <div className="related-films">
-              {related.map((f) => (
-                <div className="related-card" key={f.id} onClick={() => navigate('film', f.id)}>
-                  <div className="rc-title">{f.title}</div>
-                  <div className="rc-meta mono">{f.year}</div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+          </aside>
+        </div>
 
         <div className="footer-note mono">TUDUMTSS — where film and music cross paths.</div>
       </main>

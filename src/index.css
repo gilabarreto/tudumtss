@@ -259,6 +259,20 @@
   .detail-row:last-child{ border-bottom:none; }
   .detail-row .dk{ color:var(--muted-2); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
   .detail-row .dv{ color:var(--text); text-align:right; font-size:13px; }
+  .detail-row.clickable{ cursor:pointer; }
+  .detail-row.clickable:hover .dv{ color:var(--cyan); }
+
+  /* ---------- Film page: two-column layout (content + sidebar), à la Trakt ---------- */
+  .film-layout{ display:grid; grid-template-columns:1fr 300px; gap:40px; align-items:start; padding:44px 0; }
+  .film-side{ display:flex; flex-direction:column; gap:24px; position:sticky; top:84px; }
+  .side-block{ background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
+  .side-block h4{ font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-bottom:14px; }
+  .side-providers{ display:flex; flex-direction:column; gap:8px; }
+  .side-providers .provider-chip{ display:flex; justify-content:space-between; align-items:center; width:100%; }
+  @media(max-width:900px){
+    .film-layout{ grid-template-columns:1fr; }
+    .film-side{ position:static; }
+  }
 
   /* ---------- Info modal (watched / reviews / lists) ---------- */
   .info-modal-card{ position:relative; background:var(--surface-2); border:1px solid var(--border); border-radius:16px; padding:24px; max-width:420px; width:100%; max-height:78vh; overflow-y:auto; }
